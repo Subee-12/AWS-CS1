@@ -1,1 +1,1 @@
-# AWS-CS1
+# AWS-CS1 project
