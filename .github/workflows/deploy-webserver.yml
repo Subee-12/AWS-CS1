@@ -1,0 +1,45 @@
+name: Deploy Webserver Configuration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'webserver-userdata.sh'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Encode user data script
+        id: userdata
+        run: |
+          ENCODED=$(base64 -w 0 webserver-userdata.sh)
+          echo "encoded=$ENCODED" >> "$GITHUB_OUTPUT"
+
+      - name: Create new Launch Template version
+        id: launch-template
+        run: |
+          NEW_VERSION=$(aws ec2 create-launch-template-version \
+            --launch-template-name webserver-template \
+            --source-version '$Latest' \
+            --launch-template-data '{"UserData":"${{ steps.userdata.outputs.encoded }}"}' \
+            --query 'LaunchTemplateVersion.VersionNumber' \
+            --output text)
+          echo "Nieuwe launch template versie: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Set new version as default
+        run: |
+          aws ec2 modify-launch-template \
+            --launch-template-name webserver-template \
+            --default-version ${{ steps.launch-template.outputs.version }}
+
+      - name: Start instance refresh (rolling update)
+        run: |
+          aws autoscaling start-instance-refresh \
+            --auto-scaling-group-name webserver-asg \
+            --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":120}'
