@@ -19,7 +19,7 @@ cat > /usr/share/nginx/html/index.html << HTML
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Innovatech Solutions</title>
+<title>Innovatech Solutions CI/CD test</title>
 <style>
   body {
     margin: 0;
