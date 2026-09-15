@@ -1,0 +1,24 @@
+name: Infrastructure Pipeline Test
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test-runner:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify runner connectivity
+        run: |
+          echo "Pipeline draait op self-hosted runner"
+          hostname
+          whoami
+          date
+
+      - name: Verify AWS CLI access
+        run: |
+          aws --version || echo "AWS CLI nog niet ge\u00efnstalleerd op runner"
