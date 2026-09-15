@@ -19,7 +19,7 @@ cat > /usr/share/nginx/html/index.html << HTML
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Innovatech Solutions CI/CD test</title>
+<title>Innovatech Solutions</title>
 <style>
   body {
     margin: 0;
@@ -68,7 +68,7 @@ cat > /usr/share/nginx/html/index.html << HTML
 </head>
 <body>
   <div class="card">
-    <h1>Innovatech Solutions</h1>
+    <h1>Innovatech Solutions CI/CD test</h1>
     <p class="tagline">Cloud &amp; Network Automation Platform</p>
     <div class="badge">$SERVER_LABEL</div>
     <div class="meta">Instance ID: $INSTANCE_ID<br>Availability Zone: $AZ</div>
